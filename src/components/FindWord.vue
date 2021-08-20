@@ -1,28 +1,28 @@
 <template>
-  <h1><strong>Liste des mots</strong></h1>
+  <h1><u><strong>Trouver un mot qui: </strong></u></h1>
 
   <div class="select">
-    <label>Mots commençant par : </label>
+    <label>Commence par : </label>
     <input class="input" id="startby" type="text" value="" />
   </div>
   <div class="select">
-    <label>Mots terminant par : </label>
+    <label>Termine par : </label>
     <input class="input" id="endby" type="text" value="" />
   </div>
   <div class="select">
-    <label>Mots contenant les lettres : </label>
+    <label>Contient ces lettres : </label>
     <input class="input" id="include" type="text" value="" />
   </div>
   <div class="select">
-    <label>Mots contenant les lettres dans l'ordre : </label>
+    <label>Contient ces lettres dans l'ordre : </label>
     <input class="input" id="suites" type="text" value="" />
   </div>
   <div class="select">
-    <label>Mots ne contenant pas : </label>
+    <label>Ne contient pas ces lettres : </label>
     <input class="input" id="notinclude" type="text" value="" />
   </div>
   <div class="select">
-    <label>Nombre de lettre : </label>
+    <label>A un nombre de lettre : </label>
     <select id="selector">
       <option class="options" value="">Choissisez un nombre de lettre</option>
       <option class="options" value="1">1</option>
