@@ -197,12 +197,12 @@ export default {
   },
   methods: {
     main() {
-      var starts = document.getElementById("startby").value;
-      var ends = document.getElementById("endby").value;
-      var inside = document.getElementById("include").value;
-      var notinside = document.getElementById("notinclude").value;
-      var sizes = document.getElementById("selector").value;
-      var suites = document.getElementById("suites").value;
+      var starts = document.getElementById("startby").value.toLowerCase();
+      var ends = document.getElementById("endby").value.toLowerCase();
+      var inside = document.getElementById("include").value.toLowerCase();
+      var notinside = document.getElementById("notinclude").value.toLowerCase();
+      var sizes = document.getElementById("selector").value.toLowerCase();
+      var suites = document.getElementById("suites").value.toLowerCase();
 
       var E = lesmots;
       if (starts) {
