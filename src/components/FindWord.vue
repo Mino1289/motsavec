@@ -65,7 +65,6 @@ export default {
       var i = 0;
       let arr = [];
       while (letters.item(i) != null) {
-        console.log(letters.item(i).value);
         arr.push(letters.item(i).value.toLowerCase());
         i++;
       }
@@ -85,20 +84,19 @@ export default {
           delete params[key];
         }
       });
-      console.log(params);
+
       axios
         .get(url, {
           params: params,
         })
         .then((response) => {
-          console.log(response.request.responseURL);
           var resp =  document.getElementById("resp");
           resp.innerText = response.data.join(", ");
           var counter = document.getElementById("counter");
           counter.innerText = `${response.data.length} / 336531 = ${Math.round((response.data.length / 336531) * 1000000)/10000}%`;
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
       
     },
