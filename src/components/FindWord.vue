@@ -22,35 +22,16 @@
     <input class="input" id="notinclude" type="text" value="" />
   </div>
   <div class="select">
-    <label>A un nombre de lettre : </label>
-    <select id="selector">
-      <option class="options" value="">Choissisez un nombre de lettre</option>
-      <option class="options" value="1">1</option>
-      <option class="options" value="2">2</option>
-      <option class="options" value="3">3</option>
-      <option class="options" value="4">4</option>
-      <option class="options" value="5">5</option>
-      <option class="options" value="6">6</option>
-      <option class="options" value="7">7</option>
-      <option class="options" value="8">8</option>
-      <option class="options" value="9">9</option>
-      <option class="options" value="10">10</option>
-      <option class="options" value="11">11</option>
-      <option class="options" value="12">12</option>
-      <option class="options" value="13">13</option>
-      <option class="options" value="14">14</option>
-      <option class="options" value="15">15</option>
-      <option class="options" value="16">16</option>
-      <option class="options" value="17">17</option>
-      <option class="options" value="18">18</option>
-      <option class="options" value="19">19</option>
-      <option class="options" value="20">20</option>
-      <option class="options" value="21">21</option>
-      <option class="options" value="22">22</option>
-      <option class="options" value="23">23</option>
-      <option class="options" value="24">24</option>
-      <option class="options" value="25">25</option>
-    </select>
+    <label>Nombre de lettre : </label>
+    <button class="btn-counter" @click="number++"> + </button>
+    <span id="number"> {{ number }} </span>
+    <button class="btn-counter" @click="number-1 < 0 ? 0 : number--"> - </button>
+    <input id="comptage" type="checkbox" name="comptage" checked> <label for="comptage">Taille<p>(la taille est compté dans la recherche)</p></label>
+  </div>
+  <div v-if="number != 0" class="select">
+    <label>Position des lettres : </label>
+    <input v-for="n in number" :key="n" class="letter" type="text" maxlength="1">
+
   </div>
 
   <button class="btn" type="button" @click="main">Chercher</button><br />
@@ -67,6 +48,7 @@ export default {
   data() {
     return {
       response: undefined,
+      number: 0,
     };
   },
   methods: {
@@ -75,27 +57,41 @@ export default {
       var ends = document.getElementById("endby").value.toLowerCase();
       var inside = document.getElementById("include").value.toLowerCase();
       var notinside = document.getElementById("notinclude").value.toLowerCase();
-      var sizes = document.getElementById("selector").value.toLowerCase();
+      var sizes = this.number;
       var suites = document.getElementById("suites").value.toLowerCase();
+      var letters = document.getElementsByClassName("letter");
+      var lataille = document.getElementById("comptage").checked;
+      
+      var i = 0;
+      let arr = [];
+      while (letters.item(i) != null) {
+        console.log(letters.item(i).value);
+        arr.push(letters.item(i).value.toLowerCase());
+        i++;
+      }
+
       var url = "https://motsavecapi.herokuapp.com/";
       var params = {
         start: starts == undefined ? "" : starts,
         end: ends == undefined ? "" : ends,
         in: inside == undefined ? "" : inside,
         nin: notinside == undefined ? "" : notinside,
-        size: sizes == undefined ? "" : sizes,
+        size: sizes == undefined || !lataille ? "" : sizes,
         suite: suites == undefined ? "" : suites,
+        let: i == 0 ? "" : "[\""+arr.join("\",\"")+"\"]",
       };
       Object.keys(params).forEach(function(key) {
-        if (params[key] === "") {
+        if (params[key] === "" || params[key] === undefined || params[key] === null || params[key] === 0) {
           delete params[key];
         }
       });
+      console.log(params);
       axios
         .get(url, {
           params: params,
         })
         .then((response) => {
+          console.log(response.request.responseURL);
           var resp =  document.getElementById("resp");
           resp.innerText = response.data.join(", ");
           var counter = document.getElementById("counter");
@@ -111,10 +107,11 @@ export default {
       document.getElementById("endby").value = "";
       document.getElementById("include").value = "";
       document.getElementById("notinclude").value = "";
-      document.getElementById("selector").value = "";
+      document.getElementById("number").innerText = "0";
       document.getElementById("suites").value = "";
       document.getElementById("resp").innerText = "";
       document.getElementById("counter").innerText = "";
+      this.number = 0;
     },
   },
 };
@@ -145,5 +142,28 @@ export default {
 
 .resp {
   padding: 5px;
+}
+
+.letter {
+  width: 15px;
+  height: 15px;
+  text-align: center;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.btn-counter {
+  width: 20px;
+  height: 21px;
+  text-align: center;
+}
+
+#number {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#comptage {
+  margin-left: 15px;
 }
 </style>
