@@ -23,16 +23,19 @@
   </div>
   <div class="select">
     <label>Nombre de lettre : </label>
-    <button class="btn-counter" @click="number++"> + </button>
+    <button class="btn-counter" @click="increment"> + </button>
     <span id="number"> {{ number }} </span>
-    <button class="btn-counter" @click="number-1 < 0 ? 0 : number--"> - </button>
+    <button class="btn-counter" @click="decrement"> - </button>
     <input id="comptage" type="checkbox" name="comptage" checked> <label for="comptage">Taille<p>(la taille est compté dans la recherche)</p></label>
   </div>
-  <div v-if="number != 0" class="select">
-    <label>Position des lettres : </label>
-    <input v-for="n in number" :key="n" class="letter" type="text" maxlength="1">
+  <div id="select" class="select">
+    <div v-if="number != 0" class="select">
+      <label>Position des lettres : </label>
+      <input v-for="n in number" :key="n" class="letter" type="text" maxlength="1">
 
+    </div>
   </div>
+
 
   <button class="btn" type="button" @click="main">Chercher</button><br />
   <button class="btn" type="button" @click="reset">Reset</button>
@@ -43,6 +46,7 @@
 
 <script>
 const axios = require('axios').default;
+
 
 export default {
   data() {
@@ -65,7 +69,11 @@ export default {
       var i = 0;
       let arr = [];
       while (letters.item(i) != null) {
-        arr.push(letters.item(i).value.toLowerCase());
+        if (letters.item(i).value.toLowerCase() !== " ") {
+          arr.push(letters.item(i).value.toLowerCase());
+        } else {
+          arr.push("");
+        }
         i++;
       }
 
@@ -111,6 +119,35 @@ export default {
       document.getElementById("counter").innerText = "";
       this.number = 0;
     },
+    increment() {
+      this.number++;
+      this.update();
+    },
+    decrement() {
+      this.number-1 < 0 ? 0 : this.number--;
+      this.update();
+    },
+    update() {
+      var select = document.getElementById("select");
+      if (select != null) {
+      select.onkeyup = function(e) {
+        var target = e.srcElement;
+        var maxLength = parseInt(target.attributes["maxlength"].value, 10);
+        var myLength = target.value.length;
+        if (myLength >= maxLength) {
+          var next = target;
+          /*eslint no-cond-assign: "off"*/
+          while (next = next.nextElementSibling) {
+            if (next == null)
+              break;
+            if (next.tagName.toLowerCase() === "input") {
+              next.focus();
+              break;
+            }
+          }
+        }
+      }}
+    }
   },
 };
 </script>
